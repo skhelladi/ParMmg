@@ -1395,7 +1395,7 @@ int PMMG_part_parmeshGrps2metis( PMMG_pParMesh parmesh,idx_t* part,idx_t nproc )
     PMMG_CALLOC(parmesh,xadj_seq,vtxdist[nproc]+1,idx_t,"xadj_seq", return 0);
 
   MPI_CHECK( MPI_Gatherv(&xadj[1],recvcounts[parmesh->myrank],MPI_INT,
-                         &xadj_seq[1],recvcounts,displs,MPI_INT,
+                         parmesh->myrank == root ? &xadj_seq[1] : NULL,recvcounts,displs,MPI_INT,
                          root,parmesh->comm), return 0);
 
   if(parmesh->myrank == root)
